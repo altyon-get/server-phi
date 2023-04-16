@@ -1,4 +1,4 @@
-const dotenv=require('./extra_module/dotenv/lib/main').config();
+const dotenv=require('dotenv').config();
 
 const express=require('express');
 const cookieParser=require('cookie-parser');
