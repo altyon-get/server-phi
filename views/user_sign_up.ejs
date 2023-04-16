@@ -1,0 +1,13 @@
+<header>
+    <h1>
+        Codial | <%=title%>
+    </h1>
+</header>
+<form action="/users/create" method="POST">
+    <input type="text" name="name" placeholder="your name" required>
+    <input type="email" name="email" placeholder="your email" required>
+    <input type="password" name="password" placeholder="password" required>
+    <input type="password" name="cpassword" placeholder="confirm password" required>
+    <input type="submit" value="Sign Up">
+    <a href="/users/sign-in">Sign In</a>
+</form>
