@@ -13,6 +13,10 @@ const userSchema=new mongoose.Schema({
         type: String,
         required:true,
     },
+    city:{
+        type: String,
+        required:true,
+    },
     level1:{
         score:{
             type:Number,
@@ -39,7 +43,7 @@ const userSchema=new mongoose.Schema({
             type:Boolean,
         }
     },
-    level3:{
+    level4:{
         score:{
             type:Number,
         },
@@ -47,7 +51,6 @@ const userSchema=new mongoose.Schema({
             type:Boolean,
         }
     },
-    
 },{
     timestamps:true,
 });

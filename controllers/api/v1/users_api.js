@@ -1,41 +1,22 @@
 const User = require('../../../models/user');
 const jwt = require('jsonwebtoken');
-const admin = require('../../../admin');
+
 
 module.exports.createSession = async function (req, res) {
     try {
         let user = await User.findOne({ email: req.body.email });
-        console.log(req.body,'ye login kr rha');
+        console.log(req.body, 'ye login kr rha');
         if (!user || user.password != req.body.password) {
             return res.json(422, {
                 message: "Invalid username or password"
             });
         }
-        if (req.body.isAdmin==true) {
-            console.log('imhere')
-            console.log(admin.email)
-            if (user.email == admin.email) {
-                console.log(req.body,'admin login hogya');
-                return res.json(200, {
-                    message: 'Sign in successful, here is your token, please keep it safe!',
-                    data: {
-                        token: jwt.sign(user.toJSON(),process.env.SECRET , { expiresIn: '10000000' })
-                    }
-                })
-            }
-            
-            console.log(req.body,'nhi hua');
-            return res.json(422, {
-                message: "Admin nhi ho bhai"
-            });
-        }
-        console.log(req.body,'normal login hogya');
         return res.json(200, {
-            message: 'Sign in successful, here is your token, please keep it safe!',
+            message: 'Sign in successful!',
             data: {
                 token: jwt.sign(user.toJSON(), process.env.SECRET, { expiresIn: '10000000' })
             }
-        })
+        });
 
     } catch (err) {
         console.log('********', err);
@@ -77,11 +58,12 @@ module.exports.create = function async(req, res) {
                     name: req.body.name,
                     email: req.body.email,
                     password: req.body.password,
+                    city: req.body.city,
                     level1: { score: 0, locked: true },
                     level2: { score: 0, locked: true },
                     level3: { score: 0, locked: true },
                     level4: { score: 0, locked: true },
-                    isAdmin:false,
+                    isAdmin: false,
                 });
                 console.log('succefully created');
                 return res.json(200, {
@@ -96,13 +78,13 @@ module.exports.getUserData = async function (req, res) {
     console.log('req ayi');
     try {
         let user = await User.findById(req.user.id);
-        const x=(user.email==process.env.ADMIN);
-        console.log(x);
+        const x = (user.email == process.env.ADMIN);
+        console.log(x,' : admin h');
         if (user) {
-            console.log('1 REQ data le gyi:', user.level3);
             return res.json(200, {
                 message: "Usre Found!",
                 user: user,
+                city: user.city,
                 isAdmin: x
             });
         } else {
@@ -119,15 +101,19 @@ module.exports.getUserData = async function (req, res) {
     }
 }
 module.exports.getUsers = async function (req, res) {
-    let users = await User.find({}).sort('-score');
-    let data = [];
+    let users = await User.find({});
+    let data=[];
     users.map((user) => {
-        data.push({
-            name: user.name,
-            score: user.level1.score
+        if (!user.isAdmin) {
+            data.push({
+                name: user.name,
+                city: user.city,
+                score: user.level1.score + user.level2.score + user.level3.score + user.level4.score
+            }
+            );
         }
-        );
     })
+    console.log('req list of user legyi');
     return res.json(200, {
         message: "List of users",
         users: data,
