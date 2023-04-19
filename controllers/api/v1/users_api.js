@@ -63,7 +63,7 @@ module.exports.create = function async(req, res) {
                     level2: { score: 0, locked: true },
                     level3: { score: 0, locked: true },
                     level4: { score: 0, locked: true },
-                    isAdmin: false,
+                    isAdmin:false,
                 });
                 console.log('succefully created');
                 return res.json(200, {
@@ -78,14 +78,12 @@ module.exports.getUserData = async function (req, res) {
     console.log('req ayi');
     try {
         let user = await User.findById(req.user.id);
-        const x = (user.email == process.env.ADMIN);
-        console.log(x,' : admin h');
+        // const x = (user.email == process.env.ADMIN);
+        // console.log(x,' : admin h');
         if (user) {
             return res.json(200, {
                 message: "Usre Found!",
                 user: user,
-                city: user.city,
-                isAdmin: x
             });
         } else {
             return res.json(401, {
@@ -108,7 +106,11 @@ module.exports.getUsers = async function (req, res) {
             data.push({
                 name: user.name,
                 city: user.city,
-                score: user.level1.score + user.level2.score + user.level3.score + user.level4.score
+                score: user.level1.score + user.level2.score + user.level3.score + user.level4.score,
+                level1:user.level1,
+                level2:user.level2,
+                level3:user.level3,
+                level4:user.level4,
             }
             );
         }
