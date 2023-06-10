@@ -55,6 +55,14 @@ const userSchema=new mongoose.Schema({
             type:Boolean,
         }
     },
+    level5:{
+        score:{
+            type:Number,
+        },
+        locked:{
+            type:Boolean,
+        }
+    },
 },{
     timestamps:true,
 });

@@ -14,6 +14,7 @@ module.exports.createSession = async function (req, res) {
         return res.json(200, {
             message: 'Sign in successful!',
             data: {
+                isAdmin: user.isAdmin,
                 token: jwt.sign(user.toJSON(), process.env.SECRET, { expiresIn: '10000000' })
             }
         });
@@ -42,7 +43,7 @@ module.exports.create = function async(req, res) {
             if (user) {
                 console.log('alredy register');
                 return res.json(422, {
-                    message: 'alredy register',
+                    message: 'Already Registered!',
                 });
             }
             if (err) {
@@ -63,6 +64,7 @@ module.exports.create = function async(req, res) {
                     level2: { score: 0, locked: true },
                     level3: { score: 0, locked: true },
                     level4: { score: 0, locked: true },
+                    level5: { score: 0, locked: true },
                     isAdmin:false,
                 });
                 console.log('succefully created');
